@@ -12,7 +12,9 @@ namespace smarthealth
             {
                 config.CreateMap<MedicineDto, Medicine>();
                 config.CreateMap<Medicine, MedicineDto>();
-                
+                config.CreateMap<DoctorDto, Doctor>();
+                config.CreateMap<Doctor, DoctorDto>();
+
             });
             return mappingConfig;
         }

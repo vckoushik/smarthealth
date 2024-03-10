@@ -6,7 +6,6 @@ using smarthealth.Services;
 using smarthealth.Service;
 using AutoMapper;
 using smarthealth;
-using Microsoft.OpenApi.Models;
 using smarthealth.Repo;
 using smarthealth.Utility;
 
@@ -40,6 +39,7 @@ builder.Services.AddHttpClient<IGeminiAiService, GeminiAiService>();
 
 builder.Services.AddTransient<AppDbContext, AppDbContext>();
 builder.Services.AddTransient<IMedicineRepo, MedicineRepo>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IBaseService, BaseService>();

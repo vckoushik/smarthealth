@@ -6,5 +6,8 @@ namespace smarthealth.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public List<MedicalRecord> MedicalRecords { get; set; }
+        public List<Appointment> Appointments { get; set; }
     }
 }

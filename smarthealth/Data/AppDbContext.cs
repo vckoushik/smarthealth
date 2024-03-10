@@ -17,5 +17,9 @@ namespace smarthealth.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }
