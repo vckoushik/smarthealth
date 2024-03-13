@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using Azure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using smarthealth.Data;
 using smarthealth.Models;
 using smarthealth.Models.Dtos;
-using System.Collections.Generic;
-using static Azure.Core.HttpHeader;
+
 
 namespace smarthealth.Repo
 {

@@ -39,7 +39,8 @@ builder.Services.AddHttpClient<IGeminiAiService, GeminiAiService>();
 
 builder.Services.AddTransient<AppDbContext, AppDbContext>();
 builder.Services.AddTransient<IMedicineRepo, MedicineRepo>();
-
+builder.Services.AddTransient<IDoctorsRepo, DoctorsRepo>();
+builder.Services.AddTransient<IDepartmentRepo, DepartmentRepo>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IBaseService, BaseService>();

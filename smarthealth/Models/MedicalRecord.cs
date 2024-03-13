@@ -1,7 +1,10 @@
-﻿namespace smarthealth.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace smarthealth.Models
 {
     public class MedicalRecord
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

@@ -1,10 +1,12 @@
-﻿namespace smarthealth.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace smarthealth.Models
 {
     public class Department
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-
         public List<Doctor> Doctors { get; set; } = new List<Doctor>();
     }
 }

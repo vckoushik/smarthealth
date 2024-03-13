@@ -14,6 +14,8 @@ namespace smarthealth
                 config.CreateMap<Medicine, MedicineDto>();
                 config.CreateMap<DoctorDto, Doctor>();
                 config.CreateMap<Doctor, DoctorDto>();
+                config.CreateMap<Department, DepartmentDto>();
+                config.CreateMap<DepartmentDto, Department>();
 
             });
             return mappingConfig;

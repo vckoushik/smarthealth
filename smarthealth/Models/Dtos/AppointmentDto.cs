@@ -1,24 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace smarthealth.Models
+namespace smarthealth.Models.Dtos
 {
-    public class Appointment
+    public class AppointmentDto
     {
-        [Key]
+
         public int Id { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
         public int UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUser? User { get; set; }
         public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; }  
-
+        public Doctor? Doctor { get; set; }
 
     }
 }

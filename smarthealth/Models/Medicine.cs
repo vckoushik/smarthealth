@@ -1,7 +1,10 @@
-﻿namespace smarthealth.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace smarthealth.Models
 {
     public class Medicine
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Precaution { get; set; }

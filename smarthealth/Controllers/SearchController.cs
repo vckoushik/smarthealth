@@ -25,7 +25,6 @@ namespace smarthealth.Controllers
         [HttpPost]
         public async Task<ResponseDto> Search([FromBody] SearchRequest searchRequest)
         {
-           
             _response = await _geminiAiService.SearchAsync(searchRequest);
             return _response;
         }
