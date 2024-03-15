@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using static smarthealth.Utility.StaticDetail;
 
 namespace smarthealth.Models
 {
@@ -14,11 +15,15 @@ namespace smarthealth.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; }  
+        public Doctor Doctor { get; set; }
+        public Status Status { get; set; }  
 
-
+        internal List<Appointment> ToList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

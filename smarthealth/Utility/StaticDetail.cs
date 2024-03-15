@@ -20,5 +20,13 @@
             Json,
             MultipartFormData,
         }
+
+        public enum Status
+        {
+            Pending,
+            Approved,
+            Cancelled,
+            Completed,
+        }
     }
 }

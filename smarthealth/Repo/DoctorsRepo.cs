@@ -18,12 +18,19 @@ namespace smarthealth.Repo
         }
         public List<DoctorDto> GetDoctors()
         {
-            List<DoctorDto> doctorDtos = null;
+            List<DoctorDto> doctorDtos = new List<DoctorDto>();
             try
             {
                 List<Doctor> doctors = _db.Doctors.Include(d => d.Department).ToList();
-                
-                doctorDtos = _mapper.Map<List<DoctorDto>>(doctors);
+
+                foreach(Doctor doctor in doctors){
+                    DoctorDto doctorDto = new DoctorDto();
+                    doctorDto = _mapper.Map<DoctorDto>(doctor);
+                    doctorDto.DepartmentDto = new DepartmentDto();
+                    doctorDto.DepartmentDto.Id = doctor.Department.Id;
+                    doctorDto.DepartmentDto.Name = doctor.Department.Name;
+                    doctorDtos.Add(doctorDto);
+                }
 
             }
             catch (Exception ex)
@@ -35,11 +42,14 @@ namespace smarthealth.Repo
 
         public DoctorDto GetDoctorById(int id)
         {
-            DoctorDto doctorDto = null;
+            DoctorDto doctorDto = new DoctorDto();
             try
             {
-                Doctor doctor = _db.Doctors.First(d => d.Id == id);
+                Doctor doctor = _db.Doctors.Include(d=>d.Department).First(d => d.Id == id);
                 doctorDto = _mapper.Map<DoctorDto>(doctor);
+                doctorDto.DepartmentDto = new DepartmentDto();
+                doctorDto.DepartmentDto.Id = doctor.Department.Id;
+                doctorDto.DepartmentDto.Name = doctor.Department.Name;
 
             }
             catch (Exception ex)
@@ -50,13 +60,21 @@ namespace smarthealth.Repo
         }
         public List<DoctorDto> SearchDoctor(string query)
         {
-            List<DoctorDto> doctorDtos = null;
+            List<DoctorDto> doctorDtos = new List<DoctorDto>();
             try
             {
-                List<Doctor> doctors = (from m in _db.Doctors
-                                        where m.Name.Contains(query)
-                                        select m).ToList();
-                doctorDtos = _mapper.Map<List<DoctorDto>>(doctors);
+                List<Doctor> doctors = _db.Doctors.Include(d=>d.Department).Where(doc=>doc.Name.ToLower().Contains(query.ToLower()) || doc.Department.Name.ToLower().Contains(query.ToLower())).ToList();
+
+                foreach (Doctor doctor in doctors)
+                {
+                    DoctorDto doctorDto = new DoctorDto();
+                    doctorDto = _mapper.Map<DoctorDto>(doctor);
+                    doctorDto.DepartmentDto = new DepartmentDto();
+                    doctorDto.DepartmentDto.Id = doctor.Department.Id;
+                    doctorDto.DepartmentDto.Name = doctor.Department.Name;
+                    doctorDtos.Add(doctorDto);
+                }
+
 
             }
             catch (Exception ex)
