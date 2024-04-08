@@ -8,6 +8,7 @@ using AutoMapper;
 using smarthealth;
 using smarthealth.Repo;
 using smarthealth.Utility;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,11 @@ builder.Services.AddCors(p=>p.AddPolicy("corspolicy",build =>
 {
     build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
 }));
+
+builder.Services.AddMetricServer(options =>
+{
+    options.Port = 5678;
+});
 //Populate the values in JWT Options
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
@@ -37,8 +43,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddHttpClient<IGeminiAiService, GeminiAiService>();
 
-builder.Services.AddTransient<AppDbContext, AppDbContext>();
-builder.Services.AddTransient<IMedicineRepo, MedicineRepo>();
+builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 builder.Services.AddTransient<IDoctorsRepo, DoctorsRepo>();
 builder.Services.AddTransient<IDepartmentRepo, DepartmentRepo>();
 builder.Services.AddTransient<IAppointmentRepo, AppointmentRepo>();
@@ -64,7 +69,8 @@ app.UseCors("corspolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseHttpMetrics();
+app.MapMetrics();
 app.MapControllers();
 ApplyMigrations();
 app.Run();

@@ -9,7 +9,7 @@ namespace smarthealth.Repo
         public List<MedicineDto> SearchMedicine(string query);
         public int CreateMedicines(List<MedicineDto> medicineDtos);
         public MedicineDto CreateMedicine(MedicineDto medicineDto);
-
+        public MedicineDto UpdateMedicine(int id, MedicineDto updatedMedicineDto);
         public MedicineDto DeleteMedicineById(int id);
 
     }

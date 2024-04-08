@@ -2,7 +2,7 @@
 using smarthealth.Data;
 using smarthealth.Models;
 using smarthealth.Models.Dtos;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace smarthealth.Repo
 {
@@ -83,6 +83,32 @@ namespace smarthealth.Repo
             }
             return medicineDto;
         }
+
+        public MedicineDto UpdateMedicine(int id, MedicineDto updatedMedicineDto)
+        {
+            try
+            {
+                Medicine medicineToUpdate = _db.Medicines.FirstOrDefault(m => m.Id == id);
+
+                if (medicineToUpdate == null)
+                {
+                    throw new Exception("Medicine not found");
+                }
+
+                medicineToUpdate =  _mapper.Map<Medicine>(updatedMedicineDto);
+                medicineToUpdate.Id = id;
+                _db.Entry(UpdateMedicine).State = EntityState.Modified;
+                _db.Medicines.Update(medicineToUpdate);
+                _db.SaveChanges();
+
+                return _mapper.Map<MedicineDto>(medicineToUpdate);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
         public int CreateMedicines(List<MedicineDto> medicineDtos) 
         {
