@@ -28,6 +28,7 @@ namespace smarthealth.Service
                 new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id),
                 new Claim(JwtRegisteredClaimNames.Name,applicationUser.FirstName),
+                new Claim("id", applicationUser.Id)
             };
 
             claims.AddRange(roles.Select(role=>new Claim(ClaimTypes.Role,role)));

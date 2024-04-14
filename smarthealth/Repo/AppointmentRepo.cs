@@ -22,7 +22,23 @@ namespace smarthealth.Repo
             List<AppointmentDto> appointmentDtos = null;
             try
             {
-                List<Appointment> appointments = _db.Appointments.Include(a => a.User).Where(a => a.DoctorId == doctorId).ToList();
+                List<Appointment> appointments = _db.Appointments.Where(a => a.DoctorId == doctorId).ToList();
+
+                appointmentDtos = _mapper.Map<List<AppointmentDto>>(appointments);
+
+            }
+            catch (Exception ex)
+            {
+                return appointmentDtos;
+            }
+            return appointmentDtos;
+        }
+        public List<AppointmentDto> GetPatientAppointments(string userid)
+        {
+            List<AppointmentDto> appointmentDtos = null;
+            try
+            {
+                List<Appointment> appointments = _db.Appointments.Where(a => a.UserId == userid).ToList();
 
                 appointmentDtos = _mapper.Map<List<AppointmentDto>>(appointments);
 
@@ -38,9 +54,10 @@ namespace smarthealth.Repo
             AppointmentDto appointmentDto = null;
             try
             {
-                Appointment appointment = _db.Appointments.Include(a => a.User).Include(a=>a.Doctor).FirstOrDefault(a => a.Id == appointmentId);
-
+                Appointment appointment = _db.Appointments.FirstOrDefault(a => a.Id == appointmentId);
+            
                 appointmentDto = _mapper.Map<AppointmentDto>(appointment);
+                
 
             }
             catch (Exception ex)
@@ -54,7 +71,8 @@ namespace smarthealth.Repo
             try
             {
                 Appointment appointment = _mapper.Map<Appointment>(appointmentDto);
-
+                appointment.StartTime = DateTime.SpecifyKind(appointment.StartTime, DateTimeKind.Utc);
+                appointment.EndTime = DateTime.SpecifyKind(appointment.EndTime, DateTimeKind.Utc);
                 _db.Appointments.Add(appointment);
                 _db.SaveChanges();
                 appointmentDto = _mapper.Map<AppointmentDto>(appointment);

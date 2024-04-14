@@ -76,6 +76,33 @@ namespace smarthealth.Controllers
         }
 
         [HttpGet]
+        [Route("GetPaitentAppointments/{userid}")]
+        public ResponseDto GetPatientAppointments(string userid)
+        {
+            try
+            {
+                List<AppointmentDto> AppointmentDtos = _appointmentRepo.GetPatientAppointments(userid);
+                if (AppointmentDtos == null)
+                {
+                    throw new Exception("Appointments Not Found");
+                }
+                else
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = AppointmentDtos;
+                    _response.Message = "Found Appointment";
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+
+            }
+            return _response;
+        }
+
+        [HttpGet]
         [Route("GetById/{id}")]
         public ResponseDto GetAppointmentById(int id)
         {
