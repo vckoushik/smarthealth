@@ -17,6 +17,24 @@ namespace smarthealth.Repo
             _db = db;
             _mapper = mapper;
         }
+
+        public List<AppointmentDto> GetAppointments()
+        {
+            List<AppointmentDto> appointmentDtos = null;
+            try
+            {
+                List<Appointment> appointments = _db.Appointments.OrderBy(a => a.Id).ToList();
+
+                appointmentDtos = _mapper.Map<List<AppointmentDto>>(appointments);
+
+            }
+            catch (Exception ex)
+            {
+                return appointmentDtos;
+            }
+            return appointmentDtos;
+        }
+
         public List<AppointmentDto> ViewAppointments(int doctorId)
         {
             List<AppointmentDto> appointmentDtos = null;
@@ -135,6 +153,59 @@ namespace smarthealth.Repo
                 }
 
                 existingAppointment.Status = Utility.StaticDetail.Status.Cancelled;
+                // Save the changes to the database
+                _db.SaveChanges();
+
+                // Map the updated appointment back to the DTO and return it
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return the original appointment DTO
+                return false;
+            }
+        }
+
+        public bool ApproveAppointment(int id)
+        {
+            try
+            {
+                // Retrieve the existing appointment from the database based on its ID
+                Appointment existingAppointment = _db.Appointments.FirstOrDefault(a => a.Id == id);
+
+                // Check if the appointment exists
+                if (existingAppointment == null)
+                {
+                    throw new Exception("Appointment not found.");
+                }
+
+                existingAppointment.Status = Utility.StaticDetail.Status.Approved;
+                // Save the changes to the database
+                _db.SaveChanges();
+
+                // Map the updated appointment back to the DTO and return it
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return the original appointment DTO
+                return false;
+            }
+        }
+        public bool CompleteAppointment(int id)
+        {
+            try
+            {
+                // Retrieve the existing appointment from the database based on its ID
+                Appointment existingAppointment = _db.Appointments.FirstOrDefault(a => a.Id == id);
+
+                // Check if the appointment exists
+                if (existingAppointment == null)
+                {
+                    throw new Exception("Appointment not found.");
+                }
+
+                existingAppointment.Status = Utility.StaticDetail.Status.Completed;
                 // Save the changes to the database
                 _db.SaveChanges();
 

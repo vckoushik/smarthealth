@@ -47,6 +47,32 @@ namespace smarthealth.Controllers
 
             return Ok(timeSlots);
         }
+        [HttpGet]
+        [Route("GetAppointments/")]
+        public ResponseDto GetAppointments()
+        {
+            try
+            {
+                List<AppointmentDto> AppointmentDtos = _appointmentRepo.GetAppointments();
+                if (AppointmentDtos == null)
+                {
+                    throw new Exception("Appointments Not Found");
+                }
+                else
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = AppointmentDtos;
+                    _response.Message = "Found Appointment";
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+
+            }
+            return _response;
+        }
 
         [HttpGet]
         [Route("GetAppointments/{doctorId}")]
@@ -169,7 +195,7 @@ namespace smarthealth.Controllers
             return _response;
         }
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("cancelappointment/{id:int}")]
         public ResponseDto CancelAppointment(int id)
         {
             try
@@ -181,6 +207,50 @@ namespace smarthealth.Controllers
                 }
                 _response.IsSuccess = true;
                 _response.Message = "Appointment Cancelled Successfully";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpPut]
+        [Route("approveappointment/{id:int}")]
+        public ResponseDto ApproveAppointment(int id)
+        {
+            try
+            {
+                bool result = _appointmentRepo.ApproveAppointment(id);
+                if (result == false)
+                {
+                    throw new Exception("Appointment Not found");
+                }
+                _response.IsSuccess = true;
+                _response.Message = "Appointment Approved Successfully";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpPut]
+        [Route("completeappointment/{id:int}")]
+        public ResponseDto CompleteAppointnment(int id)
+        {
+            try
+            {
+                bool result = _appointmentRepo.CompleteAppointment(id);
+                if (result == false)
+                {
+                    throw new Exception("Appointment Not found");
+                }
+                _response.IsSuccess = true;
+                _response.Message = "Appointment Completed Successfully";
             }
             catch (Exception ex)
             {
