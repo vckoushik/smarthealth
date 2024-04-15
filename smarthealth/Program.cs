@@ -18,11 +18,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddCors(p=>p.AddPolicy("corspolicy",build =>
+builder.Services.AddCors(options =>
 {
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
-    build.WithOrigins("https://react-smarthealth.vercel.app/").AllowAnyMethod().AllowAnyHeader();
-}));
+    options.AddPolicy("corspolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000", "https://react-smarthealth.vercel.app")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 
 builder.Services.AddMetricServer(options =>
 {
