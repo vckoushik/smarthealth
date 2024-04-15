@@ -9,6 +9,7 @@ namespace smarthealth.Models
         public string Name { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
+        public string UserId { get; set; }
         public int DepartmentId { get; set; }
         public Department Department { get; set; }  
 

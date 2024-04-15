@@ -21,7 +21,7 @@ namespace smarthealth.Repo
             List<DoctorDto> doctorDtos = new List<DoctorDto>();
             try
             {
-                List<Doctor> doctors = _db.Doctors.Include(d => d.Department).ToList();
+                List<Doctor> doctors = _db.Doctors.Include(d => d.Department).OrderBy(doc=>doc.Id).ToList();
 
                 foreach(Doctor doctor in doctors){
                     DoctorDto doctorDto = new DoctorDto();
