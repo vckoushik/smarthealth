@@ -21,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddCors(p=>p.AddPolicy("corspolicy",build =>
 {
     build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("https://react-smarthealth.vercel.app/").AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.Services.AddMetricServer(options =>
