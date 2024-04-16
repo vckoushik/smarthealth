@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 builder.Services.AddCors(options =>
@@ -49,7 +50,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddHttpClient<IGeminiAiService, GeminiAiService>();
 
-builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
+builder.Services.AddTransient<IMedicineRepo, MedicineRepo>();
 builder.Services.AddTransient<IDoctorsRepo, DoctorsRepo>();
 builder.Services.AddTransient<IDepartmentRepo, DepartmentRepo>();
 builder.Services.AddTransient<IAppointmentRepo, AppointmentRepo>();
@@ -66,8 +67,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseCors("corspolicy");

@@ -97,7 +97,7 @@ namespace smarthealth.Repo
 
                 medicineToUpdate =  _mapper.Map<Medicine>(updatedMedicineDto);
                 medicineToUpdate.Id = id;
-                _db.Entry(UpdateMedicine).State = EntityState.Modified;
+                //_db.Entry(UpdateMedicine).State = EntityState.Modified;
                 _db.Medicines.Update(medicineToUpdate);
                 _db.SaveChanges();
 
