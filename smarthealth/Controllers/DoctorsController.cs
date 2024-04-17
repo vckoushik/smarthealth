@@ -138,6 +138,26 @@ namespace smarthealth.Controllers
             return _response;
         }
 
+        [HttpPut]
+        [Route("updatedoctor/{id:int}")]
+        public ResponseDto UpdateDoctor(int id,[FromBody] DoctorDto doctorDto)
+        {
+            try
+            {
+                doctorDto = _doctorsRepo.UpdateDoctor(id,doctorDto);
+                _response.IsSuccess = true;
+                _response.Result = doctorDto;
+                _response.Message = "Doctors Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
         [HttpDelete]
         [Route("{id:int}")]
         public ResponseDto Deletedoctor(int id)

@@ -9,6 +9,7 @@ namespace smarthealth.Repo
         public List<DoctorDto> SearchDoctor(string query);
         public int CreateDoctors(List<DoctorDto> doctorDtos);
         public DoctorDto CreateDoctor(DoctorDto doctorDto);
+        public DoctorDto UpdateDoctor(int id,DoctorDto doctorDto);
         public DoctorDto DeleteDoctorById(int id);
     }
 }

@@ -119,6 +119,31 @@ namespace smarthealth.Repo
             }
             return doctorDto;
         }
+        public DoctorDto UpdateDoctor(int id,DoctorDto doctorDto)
+        {
+
+            try
+            {
+               Doctor doctor = _db.Doctors.FirstOrDefault(x => x.Id== id);
+
+
+                if (doctor == null)
+                {
+                    throw new Exception("Medicine not found");
+                }
+                doctor = _mapper.Map<Doctor>(doctorDto); 
+                doctor.Id = id;
+                _db.Doctors.Update(doctor);
+                _db.SaveChanges();
+                doctorDto = _mapper.Map<DoctorDto>(doctor);
+
+            }
+            catch (Exception ex)
+            {
+                return doctorDto;
+            }
+            return doctorDto;
+        }
         public DoctorDto DeleteDoctorById(int id)
         {
             DoctorDto doctorDto = null;
