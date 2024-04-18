@@ -9,9 +9,9 @@ namespace smarthealth.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string URL { get; set;}
-
-        public int UserId { get; set; } 
+        public byte[] FileData { get; set; }
+        public string FileName { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
     }
     
