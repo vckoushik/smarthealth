@@ -16,10 +16,13 @@ namespace smarthealth.Controllers
         private readonly AppDbContext _db;
         private IMapper _mapper;
         IMedicalRecordRepo _medicalRecordRepo;
+        private ResponseDto _response;
+
         public MedicalRecordsController(AppDbContext db, IMapper mapper, IMedicalRecordRepo medicalRecordRepo)
         {
             _db = db;
             _medicalRecordRepo = medicalRecordRepo;
+            _response = new ResponseDto();
         }
         // GET: api/Download/5
         [HttpGet("Download/{id}")]
@@ -32,62 +35,120 @@ namespace smarthealth.Controllers
                 return NotFound();
             }
 
+
             var stream = new MemoryStream(medicalRecord.FileData);
 
             return File(stream, "application/octet-stream", medicalRecord.FileName);
         }
 
         [HttpGet("GetRecords")]
-        public ActionResult<List<MedicalRecordDto>> GetAllMedicalRecords()
+        public ActionResult<ResponseDto> GetAllMedicalRecords()
         {
-            List<MedicalRecordDto> medicalRecordDtos = _medicalRecordRepo.GetAllMedicalRecords();
-
-            if (medicalRecordDtos == null)
+            try
             {
-                return NotFound();
-            }
+                List<MedicalRecordDto> medicalRecordDtos = _medicalRecordRepo.GetAllMedicalRecords();
 
-            return Ok(medicalRecordDtos);
+                if (medicalRecordDtos == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = medicalRecordDtos;
+                    _response.Message = "Found Medical Record";
+                }
+
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            
+
+            return Ok(_response);
         }
 
 
         [HttpGet("GetRecord/{id}")]
-        public  ActionResult<MedicalRecordDto> MedicalRecordDetails(int id)
+        public  ActionResult<ResponseDto> MedicalRecordDetails(int id)
         {
-            var medicalRecordDto = _medicalRecordRepo.GetMedicalRecordById(id);
-
-            if (medicalRecordDto == null)
+            try
             {
-                return NotFound();
+                var medicalRecordDto = _medicalRecordRepo.GetMedicalRecordById(id);
+
+                if (medicalRecordDto == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = medicalRecordDto;
+                    _response.Message = "Found Medical Record";
+
+                }
+            }
+            catch(Exception ex) {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
             }
 
 
-            return Ok(medicalRecordDto);
+            return Ok(_response);
         }
 
         [HttpGet("GetRecordByUserId/{userid}")]
-        public ActionResult<List<MedicalRecordDto>> GetRecordByUserId(string userid)
+        public ActionResult<ResponseDto> GetRecordByUserId(string userid)
         {
-            var medicalRecordDtos = _medicalRecordRepo.GetMedicalRecordByUserId(userid);
-
-            if (medicalRecordDtos == null)
+            try
             {
-                return NotFound();
+                var medicalRecordDtos = _medicalRecordRepo.GetMedicalRecordByUserId(userid);
+
+                if (medicalRecordDtos == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = medicalRecordDtos;
+                    _response.Message = "Found doctor";
+                }
             }
-
-
-            return Ok(medicalRecordDtos);
+            catch(Exception  ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return Ok(_response);
         }
         [HttpDelete("DeleteRecord/{id}")]
-        public  ActionResult<MedicalRecordDto> DeleteMedicalRecord(int id)
+        public  ActionResult<ResponseDto> DeleteMedicalRecord(int id)
         {
-            var medicalRecordDto = _medicalRecordRepo.DeleteMedicalRecordById(id);
-
-            if (medicalRecordDto == null)
+            try
             {
-                return NotFound();
+                var medicalRecordDto = _medicalRecordRepo.DeleteMedicalRecordById(id);
+
+                if (medicalRecordDto == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                   _response.IsSuccess = true;
+                    _response.Message = "Medical Record Delete Successfully";
+                    _response.Result = medicalRecordDto;
+                }
             }
-            return Ok(medicalRecordDto);
+            catch  (Exception ex)
+            {
+                _response.IsSuccess = false;
+                   _response.Message = ex.Message;
+            }
+            
+            return Ok(_response);
         }
 
 

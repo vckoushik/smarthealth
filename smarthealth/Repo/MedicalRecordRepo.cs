@@ -41,7 +41,7 @@ namespace smarthealth.Repo
             List<MedicalRecordDto> medicalRecordDtos = null;
             try
             {
-                List<MedicalRecord> medicalRecords = _db.MedicalRecords.ToList();
+                List<MedicalRecord> medicalRecords = _db.MedicalRecords.OrderBy(M=>M.Id).ToList();
                 medicalRecordDtos = _mapper.Map<List<MedicalRecordDto>>(medicalRecords);
 
             }
