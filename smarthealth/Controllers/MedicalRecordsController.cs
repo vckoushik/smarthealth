@@ -15,14 +15,14 @@ namespace smarthealth.Controllers
     {
         private readonly AppDbContext _db;
         private IMapper _mapper;
-
-        public MedicalRecordsController(AppDbContext db, IMapper mapper)
+        IMedicalRecordRepo _medicalRecordRepo;
+        public MedicalRecordsController(AppDbContext db, IMapper mapper, IMedicalRecordRepo medicalRecordRepo)
         {
             _db = db;
-            _mapper = mapper;
+            _medicalRecordRepo = medicalRecordRepo;
         }
         // GET: api/Download/5
-        [HttpGet("{id}")]
+        [HttpGet("Download/{id}")]
         public async Task<ActionResult<MedicalRecord>> DownloadFile(int id)
         {
             var medicalRecord = await _db.MedicalRecords.FindAsync(id);
@@ -37,8 +37,62 @@ namespace smarthealth.Controllers
             return File(stream, "application/octet-stream", medicalRecord.FileName);
         }
 
+        [HttpGet("GetRecords")]
+        public ActionResult<List<MedicalRecordDto>> GetAllMedicalRecords()
+        {
+            List<MedicalRecordDto> medicalRecordDtos = _medicalRecordRepo.GetAllMedicalRecords();
+
+            if (medicalRecordDtos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(medicalRecordDtos);
+        }
+
+
+        [HttpGet("GetRecord/{id}")]
+        public  ActionResult<MedicalRecordDto> MedicalRecordDetails(int id)
+        {
+            var medicalRecordDto = _medicalRecordRepo.GetMedicalRecordById(id);
+
+            if (medicalRecordDto == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(medicalRecordDto);
+        }
+
+        [HttpGet("GetRecordByUserId/{userid}")]
+        public ActionResult<List<MedicalRecordDto>> GetRecordByUserId(string userid)
+        {
+            var medicalRecordDtos = _medicalRecordRepo.GetMedicalRecordByUserId(userid);
+
+            if (medicalRecordDtos == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(medicalRecordDtos);
+        }
+        [HttpDelete("DeleteRecord/{id}")]
+        public  ActionResult<MedicalRecordDto> DeleteMedicalRecord(int id)
+        {
+            var medicalRecordDto = _medicalRecordRepo.DeleteMedicalRecordById(id);
+
+            if (medicalRecordDto == null)
+            {
+                return NotFound();
+            }
+            return Ok(medicalRecordDto);
+        }
+
+
         [HttpPost]
-        public async Task<IActionResult> PostMedicalRecord([FromForm] MedicalRecordDto model)
+        public  IActionResult PostMedicalRecord([FromForm] MedicalRecordDto model)
         {
             if (model.FileData == null || model.FileData.Length == 0)
             {
@@ -47,25 +101,13 @@ namespace smarthealth.Controllers
 
             try
             {
-                var medicalRecord = new MedicalRecord
+                Boolean result = _medicalRecordRepo.SaveMedicalRecord(model);
+                if(result)
+                    return Ok("Medical record uploaded successfully.");
+                else
                 {
-                    Name = model.Name,
-                    Description = model.Description,
-                    CreatedDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
-                    FileName = model.FileData.FileName,
-                    UserId = model.UserId
-                };
-
-                using (var memoryStream = new MemoryStream())
-                {
-                    await model.FileData.CopyToAsync(memoryStream);
-                    medicalRecord.FileData = memoryStream.ToArray();
+                   return StatusCode(500, $"An error occurred while uploading the medical record");
                 }
-
-                _db.MedicalRecords.Add(medicalRecord);
-                await _db.SaveChangesAsync();
-
-                return Ok("Medical record uploaded successfully.");
             }
             catch (Exception ex)
             {

@@ -5,9 +5,11 @@ namespace smarthealth.Repo
     public interface IMedicalRecordRepo
     {
         public MedicalRecordDto GetMedicalRecordById(int id);
-        public MedicalRecordDto GetMedicalRecordByPatientId(int id);
-        public List<MedicalRecordDto> SearchMedicine(string query);
-        public MedicalRecordDto CreateMedicalRecord(MedicineDto medicineDto);
+        public Boolean SaveMedicalRecord(MedicalRecordDto model);
+        public List<MedicalRecordDto> GetAllMedicalRecords();
         public MedicalRecordDto DeleteMedicalRecordById(int id);
+        public List<MedicalRecordDto> GetMedicalRecordByUserId(string UserId);
+
+
     }
 }

@@ -18,6 +18,8 @@ namespace smarthealth
                 config.CreateMap<DepartmentDto, Department>();
                 config.CreateMap<Appointment, AppointmentDto>();
                 config.CreateMap<AppointmentDto, Appointment>();
+                config.CreateMap<MedicalRecord, MedicalRecordDto>().ForMember(x => x.FileData, opt => opt.Ignore()); 
+                config.CreateMap<MedicalRecordDto, MedicalRecord>(); 
 
             });
             return mappingConfig;
