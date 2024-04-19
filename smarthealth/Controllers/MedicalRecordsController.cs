@@ -153,7 +153,7 @@ namespace smarthealth.Controllers
 
 
         [HttpPost]
-        public  IActionResult PostMedicalRecord([FromForm] MedicalRecordDto model)
+        public async Task<IActionResult> PostMedicalRecord([FromForm] MedicalRecordDto model)
         {
             if (model.FileData == null || model.FileData.Length == 0)
             {
@@ -162,12 +162,14 @@ namespace smarthealth.Controllers
 
             try
             {
-                Boolean result = _medicalRecordRepo.SaveMedicalRecord(model);
-                if(result)
+                bool result = await _medicalRecordRepo.SaveMedicalRecord(model);
+                if (result)
+                {
                     return Ok("Medical record uploaded successfully.");
+                }
                 else
                 {
-                   return StatusCode(500, $"An error occurred while uploading the medical record");
+                    return StatusCode(500, $"An error occurred while uploading the medical record");
                 }
             }
             catch (Exception ex)

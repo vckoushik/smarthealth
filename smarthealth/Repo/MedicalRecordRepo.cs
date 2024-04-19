@@ -83,7 +83,7 @@ namespace smarthealth.Repo
             return medicalRecordDtos;
         }
 
-        public  Boolean SaveMedicalRecord(MedicalRecordDto model)
+        public async Task<bool> SaveMedicalRecord(MedicalRecordDto model)
         {
             if (model.FileData == null || model.FileData.Length == 0)
             {
@@ -103,12 +103,12 @@ namespace smarthealth.Repo
 
                 using (var memoryStream = new MemoryStream())
                 {
-                     model.FileData.CopyToAsync(memoryStream);
+                    await model.FileData.CopyToAsync(memoryStream);
                     medicalRecord.FileData = memoryStream.ToArray();
                 }
 
                 _db.MedicalRecords.Add(medicalRecord);
-                 _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 return true;
             }
